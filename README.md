@@ -22,7 +22,9 @@ The `nginx-deployment.yaml` file defines the following configuration:
   - Request: 128Mi
   - Limit: 256Mi
 
-## How to Deploy
+## Deployment Methods
+
+### Method 1: Manual Deployment
 
 1. Clone this repository:
    ```bash
@@ -39,6 +41,30 @@ The `nginx-deployment.yaml` file defines the following configuration:
    kubectl get deployments
    kubectl get pods
    ```
+
+### Method 2: Automated Deployment (GitHub Actions)
+
+This repository includes a GitHub Actions workflow that automatically deploys the nginx manifest to your Kubernetes cluster whenever changes are pushed to the main branch.
+
+#### Prerequisites for GitHub Actions:
+
+1. Add your Kubernetes configuration as a base64-encoded secret in your GitHub repository:
+   ```bash
+   cat ~/.kube/config | base64 | pbcopy  # For macOS
+   # OR
+   cat ~/.kube/config | base64 | clip    # For Windows
+   ```
+
+2. In your GitHub repository:
+   - Go to Settings > Secrets and Variables > Actions
+   - Create a new secret named `KUBE_CONFIG`
+   - Paste your base64-encoded kubeconfig as the value
+
+The workflow will:
+- Install kubectl
+- Configure access to your cluster
+- Deploy the manifest
+- Verify the deployment status
 
 ## Scaling
 The deployment is configured with 5 replicas by default. To scale the deployment:
